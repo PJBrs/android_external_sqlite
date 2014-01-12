@@ -14,6 +14,35 @@ common_src_files := sqlite3.c
 #   SQLITE_DEFAULT_AUTOVACUUM=1  causes the databases to be subject to auto-vacuum
 sqlite_cflags :=  -DHAVE_USLEEP=1 -DSQLITE_DEFAULT_JOURNAL_SIZE_LIMIT=1048576 -DSQLITE_THREADSAFE=1 -DNDEBUG=1 -DSQLITE_ENABLE_MEMORY_MANAGEMENT=1 -DSQLITE_DEFAULT_AUTOVACUUM=1 -DSQLITE_TEMP_STORE=3 -DSQLITE_ENABLE_FTS3 -DSQLITE_ENABLE_FTS3_BACKWARDS -Dfdatasync=fdatasync
 
+# the static device library
+include $(CLEAR_VARS)
+
+LOCAL_SRC_FILES := $(common_src_files)
+
+ifneq ($(TARGET_ARCH),arm)
+LOCAL_LDLIBS += -lpthread
+endif
+
+LOCAL_CFLAGS += $(sqlite_cflags) -DSQLITE_OMIT_LOAD_EXTENSION
+
+LOCAL_MODULE:= libsqlite
+LOCAL_C_INCLUDES += $(call include-path-for, system-core)/cutils
+LOCAL_STATIC_LIBRARIES += liblog \
+            libicuuc \
+            libicui18n \
+            libutils
+
+# include android specific methods
+LOCAL_WHOLE_STATIC_LIBRARIES := libsqlite3_android
+
+## Choose only one of the allocator systems below
+# new sqlite 3.5.6 no longer support external allocator 
+#LOCAL_SRC_FILES += mem_malloc.c
+#LOCAL_SRC_FILES += mem_mspace.c
+
+
+include $(BUILD_STATIC_LIBRARY)
+
 # the device library
 include $(CLEAR_VARS)
 
