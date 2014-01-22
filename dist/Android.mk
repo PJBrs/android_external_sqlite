@@ -26,14 +26,14 @@ endif
 LOCAL_CFLAGS += $(sqlite_cflags) -DSQLITE_OMIT_LOAD_EXTENSION
 
 LOCAL_MODULE:= libsqlite
-LOCAL_C_INCLUDES += $(call include-path-for, system-core)/cutils
-LOCAL_STATIC_LIBRARIES += liblog \
-            libicuuc \
-            libicui18n \
-            libutils
+#LOCAL_C_INCLUDES += $(call include-path-for, system-core)/cutils
+#LOCAL_STATIC_LIBRARIES += liblog \
+#            libicuuc \
+#            libicui18n \
+#            libutils
 
 # include android specific methods
-LOCAL_WHOLE_STATIC_LIBRARIES := libsqlite3_android
+#LOCAL_WHOLE_STATIC_LIBRARIES := libsqlite3_android
 
 ## Choose only one of the allocator systems below
 # new sqlite 3.5.6 no longer support external allocator 
